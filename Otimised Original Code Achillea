@@ -1,0 +1,97 @@
+# Time module to measure the execution of my code
+import time
+
+# Math module for square root function
+import math
+
+# Function to create a sequence of numbers
+# This will form the sequence that will be fed into my code
+def create_number_sequ(start, end):
+    return list(range(start, end + 1))
+
+# Function that checks if a number is prime
+def check_prime(number):
+    # If number is less than or equal to 1, it's not a prime
+    if number <= 1:
+        return False
+
+    # If the number is 2, it's a prime
+    if number == 2:
+        return True
+
+    # If the number is even and greater than 2, it's not prime
+    if number % 2 == 0:
+        return False
+
+    # Checking divisibility of the number up to its square root
+    for i in range(3, int(math.sqrt(number)) + 1, 2):
+        if number % i == 0:
+            return False
+    # If none of the conditions are met, the number is prime
+    return True
+
+# Palindrome function
+def palindrome_number(num):
+    # Reversing the number using math
+    reversed_num = 0
+    original_num = num
+    while num > 0:
+        reversed_num = reversed_num * 10 + num % 10
+        num //= 10
+    # Check to see if reverse number is equal to the original number
+    return original_num == reversed_num
+
+# Main Body #
+start_time = time.perf_counter()
+
+## Change this part to user input ##
+# Defining the range of numbers to be generated
+start_value = 1_100_000_000                     # int(input("What is the first number of the sequence: "))
+end_value = 15_000_000_000                  # int(input("What is the second number of the sequence: "))
+
+# Creating a sequence of numbers within the defined range
+sequence = create_number_sequ(start_value, end_value)
+
+# Initialising an empty list to hold the special numbers found
+special_numbers = []
+
+# Iterating through each number in the sequence
+for num in sequence:
+    # Checks if number is palindrome through the palindrome function
+    if palindrome_number(num):
+        # If True, then checks if that number is a prime through the check_prime function
+        if check_prime(num):
+            # If both conditions have been met, it adds that number to the list
+            special_numbers.append(num)
+
+# Check if more than 6 special numbers have been found
+if len(special_numbers) > 6:
+    # If ture, only print first 3 and last 3 special numbers in the list
+    print("First 3 numbers are: ", special_numbers[:3])
+    print("Last 3 numbers are:", special_numbers[-3:])
+else:
+    # Otherwise, print all the special numbers in the list
+    print("Special Numbers are:", special_numbers)
+
+## print("Special Numbers are:", special_numbers) ##
+
+end_time = time.perf_counter()
+
+# Displays the count of the special numbers in the list
+print(f"There are {len(special_numbers)} special numbers")
+# Calculating the time taken
+print(f"Time take: {end_time - start_time}")
+
+########## TEST CASE ##########
+"""
+Input 1 to 2_000 [Time: 0.00108]
+Input 100 to 10_000 [Time: 0.00625]
+Input 20_000 to 80_000 [Time: 0.04179]
+Input 100_000 to 2_000_000 [Time: 1.62070]
+Input 2_000_000 to 9_000_000 [Time: 6.30448]
+Input 10_000_000 to 100_000_000 [Time: 87.78506]
+Input 100_000_000 to 400_000_000 [Time:361.92129]
+Input 1_100_000_000 to 15_000_000_000 [Time: Memory Error 0]
+Input 15_000_000_000 to 100_000_000_000 [Time: Memory Error 0]
+Input 1 to 1_000_000_000_000 [Time: Memory Error 0]
+"""
