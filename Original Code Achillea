@@ -1,0 +1,53 @@
+import time
+def create_number_sequ(start, end):
+    return list(range(start, end + 1))
+
+def check_prime(number):
+    if number <= 1:
+        return False
+
+    for i in range(2, number):
+        if number % i == 0:
+            return False
+    return True
+
+def palindrome_number(num):
+    return str(num) == str(num)[::-1]
+
+# Main Body #
+start_time = time.perf_counter()
+# Change this part to user input
+start_value = 20_000
+end_value = 80_000
+
+sequence = create_number_sequ(start_value, end_value)
+
+special_numbers = []
+
+for num in sequence:
+    if check_prime(num) and palindrome_number(num):
+        special_numbers.append(num)
+if len(special_numbers) > 6:
+    print("First 3 numbers are: ", special_numbers[:3])
+    print("Last 3 numbers are:", special_numbers[-3:])
+else:
+    print("Special Numbers are:", special_numbers)
+
+## print("Special Numbers are:", special_numbers) ##
+    
+end_time = time.perf_counter()
+print(f"Time take: {end_time - start_time}")
+
+########## TEST CASE ##########
+"""
+Input 1 to 2_000 [Time: 0.01217]
+Input 100 to 10_000 [Time: 0.25651]
+Input 20_000 to 80_000 [Time: 12.52800]
+Input 100_000 to 2_000_000 [Time: Too Long]
+Input 2_000_000 to 9_000_000 [Time: Too Long]
+Input 10_000_000 to 100_000_000 [Time: Too Long]
+Input 100_000_000 to 400_000_000 [Time: Too Long]
+Input 1_100_000_000 to 15_000_000_000 [Time: Too Long]
+Input 15_000_000_000 to 100_000_000_000 [Time: Too Long]
+Input 1 to 1_000_000_000_000 [Time: Too Long]
+"""
