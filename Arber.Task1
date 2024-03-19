@@ -1,0 +1,63 @@
+# Arber Oruci ID: 001341361
+
+import timeit  # A useful library for measuring the execution time of small code snippets
+
+
+def generate_palindrome(m, n):
+    palindrome = []     # Create a list to store all the palindromes
+    for i in range(m, n):  # Start a loop that goes through every number in range n,m
+        s = str(i)           # For each number it converts it into a string
+        if s == s[::-1]:     # After converting we check if the string is read the same when written backwards
+            palindrome.append(i)  # If it does, we add it to list
+    return palindrome
+
+
+def check_prime(numbers):
+    primes = []  # Empty list for prime numbers
+    for n in numbers:
+        if n == 2:  # If the number is equal to 2, it adds it to the list
+            primes.append(n)
+        if n < 2 or n % 2 == 0:  # It skips the iteration if the number is less then or equal to 2
+            continue
+        else:
+            for x in range(3, int(n ** 0.5) + 1, 2):  # For any other number it checks if the
+                if n % x == 0:                        # number is divisible by any number up to its square root
+                    break                          # If so it break the loop
+            else:
+                primes.append(n)               # If it is not, it means it's a prime and adds it to the list
+    return primes
+
+
+def run_test_cases(test_cases):
+    # Run test cases and measure the time taken for each test case.
+    for m, n in test_cases:
+        print(f"Testing for range [{m}-{n}]")
+        # Start the time for time measuring
+        start = timeit.default_timer()
+        #  Generate the palindromes from the given range in the test cases
+        palindromes = generate_palindrome(m, n)
+        # Check if the palindromes are prime
+        special_num = check_prime(palindromes)
+        # End the time for time measuring
+        endtime = timeit.default_timer()
+        # Print the length of the list and the time, with the first and last 3 numbers of the list
+        print(f"Found {len(special_num)} special numbers in {endtime - start} seconds.")
+        if len(special_num) > 6:
+            print(f"The first and last three numbers are: {special_num[:3], special_num[-3:]}")
+        else:
+            print(f"The special numbers found are: {special_num}")
+        print(".................................................................................")
+
+
+if __name__ == "__main__":
+    #Here are the test cases given by me
+    #test_cases = [(-1000, 0), (-1000, 1000), (1, 10 ** 2), (1, 10 ** 3),
+    #               (1, 10 ** 4), (1, 10 ** 5), (1, 10 ** 6), (1, 10 ** 7),
+    #               (1, 10 ** 8), (1, 10 ** 9), (1, 10 ** 10), (1, 10 ** 11),
+    #               (1, 10 ** 12), (1, 10**13), (1, 10**14), (1, 10**15), (1, 10**16)]
+    test_cases = [ (1, 1_000), (100, 10_000), (20_000, 80_000),
+                  (100_000, 2_000_000), (2_000_000, 9_000_000),
+                  (10_000_000, 100_000_000),(100_000_000, 400_000_000),
+                  (1_100_000_000, 15_000_000_000), (15_000_000_000, 100_000_000_000),
+                  (1, 1_000_000_000_000)]
+    run_test_cases(test_cases)
