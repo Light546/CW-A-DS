@@ -1,1 +1,86 @@
 
+# Arber Oruci ID: 001341361
+
+from itertools import count  # Library for generating iterators for efficient looping
+import timeit  # A useful library for measuring the execution time of small code snippets
+import random
+
+
+def all_palindromes(minP, maxP):
+    palindromes = generate_palindrome()  # Generate all palindromes
+    palindrome_list = []  # Initialize an empty list to store the palindromes in the given range
+    for palindrome in palindromes:  # Iterate over the generated palindromes
+        if palindrome > maxP:  # If the palindrome is greater than maxP, break the loop as we have exceeded the range
+            break
+        if palindrome < minP:  # If the palindrome is less than minP, skip this iteration as it's not in the range
+            continue
+        palindrome_list.append(palindrome)  # If the palindrome is in the range, append it to the list
+    return palindrome_list  # Return the list of palindromes in the given range
+
+
+def generate_palindrome():
+    # It first yields 0, and then generates palindromes of increasing number of digits.
+    yield 0
+    for d in count(1):  # For each number of digits starting from 1
+        first = 10 ** ((d - 1) // 2)  # Calculate the first half of the palindrome
+        for number in range(first, 10 * first):  # For each number in the range of the first half
+            s = str(number)  # Convert the number to a string
+            yield int(s + s[-(d % 2) - 1::-1])  # Form the full palindrome and yield it
+
+
+def check_primes(n, k=3):
+    # This check_primes function checks if a number n is prime using the Miller-Rabin primality test
+    if n < 2:  # If n is less than 2, it's not prime
+        return False
+    for p in [2, 3, 5, 7, 11]:  # Checks if divisibility by the first few prime numbers
+        if n % p == 0:  # If n is divisible by p
+            return n == p  # Return True if n is equal to p
+    s, d = 0, n - 1
+    while d % 2 == 0:  # Write n-1 as 2^s * d where d is odd
+        s, d = s + 1, d // 2
+    for _ in range(k):  # Perform the Miller-Rabin test k = 3 times
+        x = pow(random.randint(2, n - 1), d, n)  # Pick a random number in [2, n-1] and compute x = a^d % n
+        if x == 1 or x == n - 1:  # If x is 1 or n-1, n passes this round of the test
+            continue
+        for _ in range(s - 1):  # Repeat the test s-1 times
+            x = pow(x, 2, n)  # Square x and reduce modulo n
+            if x == n - 1:  # If x becomes n-1, n passes this round of the test
+                break
+        else:  # If x never becomes n-1, n is composite
+            return False
+    return True  # If n passes all rounds of the test, it's probably prime
+
+
+def run_test_cases(test_cases):
+    # Run test cases and measure the time taken for each test case.
+    for minP, maxP in test_cases:
+        print(f"Testing for range [{minP}-{maxP}]")
+        # Start the time for time measuring
+        start = timeit.default_timer()
+        #  Generate the palindromes from the given range in the test cases
+        palindromes = all_palindromes(minP, maxP)
+        # Check if the palindromes are prime
+        special_num = [p for p in palindromes if check_primes(p)]
+        # End the time for time measuring
+        endtime = timeit.default_timer()
+        # Print out the results
+        print(f"Found {len(special_num)} special numbers in {endtime - start} seconds.")
+        if len(special_num) > 6:
+            print(f"The first and last three numbers are: {special_num[:3], special_num[-3:]}")
+        else:
+            print(f"The special numbers found are: {special_num}")
+        print("\n.................................................................................")
+
+
+if __name__ == "__main__":
+    # Here are the test cases given by me
+    # test_cases = [(-1000, 0), (-1000, 1000), (1, 10 ** 2), (1, 10 ** 3),
+    #               (1, 10 ** 4), (1, 10 ** 5), (1, 10 ** 6), (1, 10 ** 7),
+    #               (1, 10 ** 8), (1, 10 ** 9), (1, 10 ** 10), (1, 10 ** 11),
+    #               (1, 10 ** 12), (1, 10**13), (1, 10**14), (1, 10**15), (1, 10**16)]
+    test_cases = [(1, 2_000), (100, 10_000), (20_000, 80_000),
+                  (100_000, 2_000_000), (2_000_000, 9_000_000),
+                  (10_000_000, 100_000_000), (100_000_000, 400_000_000),
+                  (1_100_000_000, 15_000_000_000), (15_000_000_000, 100_000_000_000),
+                  (1, 1_000_000_000_000)]
+    run_test_cases(test_cases)
